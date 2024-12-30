@@ -1,0 +1,504 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "295117e7-564e-469e-a845-75e19e6a3f92",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Task 1: Choose a Website:\n",
+    "The Official Website of the European Union\n",
+    "https://commission.europa.eu/strategy-and-policy/priorities-2019-2024/europe-fit-digital-age/europes-digital-decade-digital-targets-2030_en \n",
+    "The website includes EU's digital strategy and 2030 targets on education policies.\n",
+    "I intend to use National Digital Decade Strategic Roadmaps Reports for EU's countries datas as Austria, Belgium, Germany, France, Netherlands"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e27af7ae-2b85-44a3-a78c-b2923976f543",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Task 2: Set Up Your Environment"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "60067da2-0685-420b-975e-4314e163fa6e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Requirement already satisfied: scrapy in c:\\users\\cansu\\anaconda3\\lib\\site-packages (2.11.1)\n",
+      "Requirement already satisfied: Twisted>=18.9.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (23.10.0)\n",
+      "Requirement already satisfied: cryptography>=36.0.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (42.0.5)\n",
+      "Requirement already satisfied: cssselect>=0.9.1 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (1.2.0)\n",
+      "Requirement already satisfied: itemloaders>=1.0.1 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (1.1.0)\n",
+      "Requirement already satisfied: parsel>=1.5.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (1.8.1)\n",
+      "Requirement already satisfied: pyOpenSSL>=21.0.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (24.0.0)\n",
+      "Requirement already satisfied: queuelib>=1.4.2 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (1.6.2)\n",
+      "Requirement already satisfied: service-identity>=18.1.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (18.1.0)\n",
+      "Requirement already satisfied: w3lib>=1.17.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (2.1.2)\n",
+      "Requirement already satisfied: zope.interface>=5.1.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (5.4.0)\n",
+      "Requirement already satisfied: protego>=0.1.15 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (0.1.16)\n",
+      "Requirement already satisfied: itemadapter>=0.1.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (0.3.0)\n",
+      "Requirement already satisfied: setuptools in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (69.5.1)\n",
+      "Requirement already satisfied: packaging in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (23.2)\n",
+      "Requirement already satisfied: tldextract in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (3.2.0)\n",
+      "Requirement already satisfied: lxml>=4.4.1 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (5.2.1)\n",
+      "Requirement already satisfied: PyDispatcher>=2.0.5 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from scrapy) (2.0.5)\n",
+      "Requirement already satisfied: cffi>=1.12 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from cryptography>=36.0.0->scrapy) (1.16.0)\n",
+      "Requirement already satisfied: jmespath>=0.9.5 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from itemloaders>=1.0.1->scrapy) (1.0.1)\n",
+      "Requirement already satisfied: six in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from protego>=0.1.15->scrapy) (1.16.0)\n",
+      "Requirement already satisfied: attrs>=16.0.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from service-identity>=18.1.0->scrapy) (23.1.0)\n",
+      "Requirement already satisfied: pyasn1-modules in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from service-identity>=18.1.0->scrapy) (0.2.8)\n",
+      "Requirement already satisfied: pyasn1 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from service-identity>=18.1.0->scrapy) (0.4.8)\n",
+      "Requirement already satisfied: automat>=0.8.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from Twisted>=18.9.0->scrapy) (20.2.0)\n",
+      "Requirement already satisfied: constantly>=15.1 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from Twisted>=18.9.0->scrapy) (23.10.4)\n",
+      "Requirement already satisfied: hyperlink>=17.1.1 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from Twisted>=18.9.0->scrapy) (21.0.0)\n",
+      "Requirement already satisfied: incremental>=22.10.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from Twisted>=18.9.0->scrapy) (22.10.0)\n",
+      "Requirement already satisfied: twisted-iocpsupport<2,>=1.0.2 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from Twisted>=18.9.0->scrapy) (1.0.2)\n",
+      "Requirement already satisfied: typing-extensions>=4.2.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from Twisted>=18.9.0->scrapy) (4.11.0)\n",
+      "Requirement already satisfied: idna in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from tldextract->scrapy) (3.7)\n",
+      "Requirement already satisfied: requests>=2.1.0 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from tldextract->scrapy) (2.32.2)\n",
+      "Requirement already satisfied: requests-file>=1.4 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from tldextract->scrapy) (1.5.1)\n",
+      "Requirement already satisfied: filelock>=3.0.8 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from tldextract->scrapy) (3.13.1)\n",
+      "Requirement already satisfied: pycparser in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from cffi>=1.12->cryptography>=36.0.0->scrapy) (2.21)\n",
+      "Requirement already satisfied: charset-normalizer<4,>=2 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from requests>=2.1.0->tldextract->scrapy) (2.0.4)\n",
+      "Requirement already satisfied: urllib3<3,>=1.21.1 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from requests>=2.1.0->tldextract->scrapy) (2.2.2)\n",
+      "Requirement already satisfied: certifi>=2017.4.17 in c:\\users\\cansu\\anaconda3\\lib\\site-packages (from requests>=2.1.0->tldextract->scrapy) (2024.6.2)\n",
+      "Note: you may need to restart the kernel to use updated packages.\n"
+     ]
+    }
+   ],
+   "source": [
+    "pip install scrapy"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "569f363e-2116-4161-be84-3b4d017fead6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Task 3: Data Extraction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "430518b7-ba01-4f19-8b8d-54f186f55a4f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "You have found:  1127 elements in your html!\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Import a scrapy Selector\n",
+    "from scrapy import Selector\n",
+    "\n",
+    "# Import requests\n",
+    "import requests\n",
+    "\n",
+    "url = 'https://commission.europa.eu/strategy-and-policy/priorities-2019-2024/europe-fit-digital-age/europes-digital-decade-digital-targets-2030_en'\n",
+    "\n",
+    "# Create the string html containing the HTML source\n",
+    "html = requests.get(url).content\n",
+    "\n",
+    "# Create the Selector object sel from html\n",
+    "sel = Selector(text = html)\n",
+    "\n",
+    "# Print out the number of elements in the HTML document\n",
+    "print( \"You have found: \", len(sel.xpath('//*')), 'elements in your html!')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "f7be271f-ddfe-4cc6-b7ae-74b20c15a51f",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "NameError",
+     "evalue": "name 'body' is not defined",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+      "Cell \u001b[1;32mIn[28], line 1\u001b[0m\n\u001b[1;32m----> 1\u001b[0m html\u001b[38;5;241m/\u001b[39mbody\u001b[38;5;241m/\u001b[39mdiv[\u001b[38;5;241m4\u001b[39m]()\n",
+      "\u001b[1;31mNameError\u001b[0m: name 'body' is not defined"
+     ]
+    }
+   ],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "28f35a17-c772-4bd9-920a-66e26a1e4c77",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "SyntaxError",
+     "evalue": "invalid syntax (2806104340.py, line 1)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;36m  Cell \u001b[1;32mIn[27], line 1\u001b[1;36m\u001b[0m\n\u001b[1;33m    //*[@id=\"main-content\"]\u001b[0m\n\u001b[1;37m    ^\u001b[0m\n\u001b[1;31mSyntaxError\u001b[0m\u001b[1;31m:\u001b[0m invalid syntax\n"
+     ]
+    }
+   ],
+   "source": [
+    "//*[@id=\"main-content\"]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "27b71dfe-2683-4de1-8f5d-c30cd9a7d1bc",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "b5d28396-4461-4785-a6b6-ae8a3bced8a7",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "SyntaxError",
+     "evalue": "invalid syntax (1059622895.py, line 1)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;36m  Cell \u001b[1;32mIn[9], line 1\u001b[1;36m\u001b[0m\n\u001b[1;33m    //*[@id=\"block-ewcms-theme-page-header\"]/div/div/div/h1/span\u001b[0m\n\u001b[1;37m    ^\u001b[0m\n\u001b[1;31mSyntaxError\u001b[0m\u001b[1;31m:\u001b[0m invalid syntax\n"
+     ]
+    }
+   ],
+   "source": [
+    "//*[@id=\"block-ewcms-theme-page-header\"]/div/div/div/h1/span"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "2b5b3311-069d-4c34-9148-5617ae353baf",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "SyntaxError",
+     "evalue": "invalid syntax (1059622895.py, line 1)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;36m  Cell \u001b[1;32mIn[10], line 1\u001b[1;36m\u001b[0m\n\u001b[1;33m    //*[@id=\"block-ewcms-theme-page-header\"]/div/div/div/h1/span\u001b[0m\n\u001b[1;37m    ^\u001b[0m\n\u001b[1;31mSyntaxError\u001b[0m\u001b[1;31m:\u001b[0m invalid syntax\n"
+     ]
+    }
+   ],
+   "source": [
+    "//*[@id=\"block-ewcms-theme-page-header\"]/div/div/div/h1/span"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "641016f4-1d7f-4d13-a97c-29f2fa1422ac",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "id": "8083aecb-6ff8-42b5-8707-199948a9abd6",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "SyntaxError",
+     "evalue": "invalid syntax (1715512113.py, line 1)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;36m  Cell \u001b[1;32mIn[19], line 1\u001b[1;36m\u001b[0m\n\u001b[1;33m    pip install scrapy\u001b[0m\n\u001b[1;37m        ^\u001b[0m\n\u001b[1;31mSyntaxError\u001b[0m\u001b[1;31m:\u001b[0m invalid syntax\n"
+     ]
+    }
+   ],
+   "source": [
+    " pip install scrapy\n",
+    " cat > myspider.py <<EOF\n",
+    "import scrapy\n",
+    "\n",
+    "class BlogSpider(scrapy.Spider):\n",
+    "    name = 'blogspider'\n",
+    "    start_urls = ['https://www.zyte.com/blog/']\n",
+    "\n",
+    "    def parse(self, response):\n",
+    "        for title in response.css('.oxy-post-title'):\n",
+    "            yield {'title': title.css('::text').get()}\n",
+    "\n",
+    "        for next_page in response.css('a.next'):\n",
+    "            yield response.follow(next_page, self.parse)\n",
+    "EOF\n",
+    " scrapy runspider myspider.py"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 99,
+   "id": "a1c46e82-e2f9-49ab-894a-f876fb1891ab",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "bytes"
+      ]
+     },
+     "execution_count": 99,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "type(html)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 121,
+   "id": "fa790243-160c-4287-aa0a-991c2227fc7e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "scrapy.selector.unified.Selector"
+      ]
+     },
+     "execution_count": 121,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "type(sel)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 123,
+   "id": "da47f4b2-0002-4ec9-85b7-aff33ba1a9a9",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "xpath_for_titles = '//*[@id=\"block-ewcms-theme-page-header\"]/div/span'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 124,
+   "id": "863512c9-56d6-4818-831d-c2ece94a586e",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[]"
+      ]
+     },
+     "execution_count": 124,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "sel.xpath(xpath_for_titles).extract()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 125,
+   "id": "ff65aefd-67ab-4619-b3a2-76d73c783122",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0"
+      ]
+     },
+     "execution_count": 125,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "len(sel.xpath(xpath_for_titles).extract())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 126,
+   "id": "0cac5dd1-4ffa-424f-b7ca-390fb5d85a92",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "titles = sel.xpath(xpath_for_titles).extract()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 127,
+   "id": "7030042b-921f-4031-9424-1b610036347e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "xpath_for_titles = '//*[@id=\"block-ewcms-theme-page-header\"]/div/span/text()'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 128,
+   "id": "140ceba3-1532-4adc-8268-c7dd466422bb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "titles = sel.xpath(xpath_for_titles).extract()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 135,
+   "id": "179bda7e-0e00-4edc-814c-cc6872654d3c",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "You have found:  1127\n"
+     ]
+    }
+   ],
+   "source": [
+    "url = 'https://commission.europa.eu/strategy-and-policy/priorities-2019-2024/europe-fit-digital-age/europes-digital-decade-digital-targets-2030_en'\n",
+    "\n",
+    "# Create the string html containing the HTML source\n",
+    "html = requests.get(url).content\n",
+    "\n",
+    "# Create the Selector object sel from html\n",
+    "sel = Selector(text = html)\n",
+    "\n",
+    "# Print out the number of elements in the HTML document\n",
+    "print( \"You have found: \", len(sel.xpath('//*')))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 148,
+   "id": "83a25b7c-3800-461b-b770-f283a12f1fca",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['<li>every two years, adjusted <a href=\"https://digital-strategy.ec.europa.eu/en/policies/national-strategic-roadmaps\">Digital decade strategic roadmaps</a> in which the Member States outline adopted or planned actions to reach the 2030 targets</li>']"
+      ]
+     },
+     "execution_count": 148,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "xpath_for_titles_of_adverts = '//*[@id=\"block-ewcms-theme-main-page-content\"]/article/div/div[2]/div/div[2]/div[3]/div/ul/li[3]'\n",
+    "titles_of_adverts = sel.xpath(xpath_for_titles_of_adverts).extract()\n",
+    "titles_of_adverts"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f3f212da-37fa-4279-b382-430f7079c347",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Task 4: Data Cleaning"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 153,
+   "id": "96808e30-ecb5-4382-8f92-814b265804f3",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['every two years, adjusted Digital decade strategic roadmaps in which the Member States outline adopted or planned actions to reach the 2030 targets']\n"
+     ]
+    }
+   ],
+   "source": [
+    "import re\n",
+    "\n",
+    "def strip_tags(html):\n",
+    "    clean = re.compile('<.*?>')\n",
+    "    return re.sub(clean, '', html)\n",
+    "\n",
+    "# Apply strip_tags to each element in the list\n",
+    "cleaned_strings = [strip_tags(html) for html in titles_of_adverts]\n",
+    "\n",
+    "print(cleaned_strings)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8e48086c-9b67-4817-a96c-2ffdcaf2e635",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Task 5: Data Storage"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d3a4e70f-8b3c-4b91-8e6a-978666fd8ec5",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
